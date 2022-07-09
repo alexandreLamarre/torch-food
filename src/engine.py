@@ -8,11 +8,10 @@ from typing import Dict, List, Tuple
 import logging
 
 logger = logging.getLogger('__name__')
-logger.basicConfig(format='[%(levelname)s] %(asctime)s : %(message)s')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 formatter = logging.Formatter('[%(levelname)s] %(asctime)s : %(message)s')
 ch.setFormatter(formatter)
 logger.addHandler(ch)
@@ -72,9 +71,9 @@ def train_step(
         y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
         train_acc += (y_pred_class == y).sum().item()/len(y_pred)
 
-        train_loss = train_loss / len(dataloader)
-        train_acc = train_acc / len(dataloader)
-        return train_loss, train_acc
+    train_loss = train_loss / len(dataloader)
+    train_acc = train_acc / len(dataloader)
+    return train_loss, train_acc
 
 
 def test_step(
@@ -170,6 +169,7 @@ def train(
                     test_loss: [1.2641, 1.5706],
                     test_acc: [0.3400, 0.2973]}
     '''
+    logger.info(f"Training Neural Network on device {device}")
 
     # Create empty results dictionary
     results = {
